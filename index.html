@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kiki's Boda</title>
+<style>
+:root{--ink:#172016;--green:#087f3e;--lime:#b7ef43;--cream:#f7f8f2;--muted:#69726a;--card:#fff;--line:#e2e7df}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--cream);color:var(--ink)}
+header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:15px 5%;gap:20px}
+.logo{font-weight:900;font-size:23px;letter-spacing:-1px}.logo span{color:var(--green)}
+nav button{border:0;background:none;padding:8px 10px;font-weight:700;color:var(--muted);cursor:pointer}
+.hero{padding:58px 5% 35px;background:linear-gradient(135deg,#eff9df,#fff)}
+.hero-grid{max-width:1100px;margin:auto;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+h1{font-size:clamp(42px,7vw,76px);line-height:.92;margin:0 0 20px;letter-spacing:-4px}
+.hero p{font-size:19px;color:var(--muted);max-width:560px}
+.pill{display:inline-block;background:var(--lime);padding:7px 12px;border-radius:999px;font-weight:900;font-size:12px;margin-bottom:18px}
+.booking{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 15px 45px #17351a16}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.type{border:2px solid var(--line);border-radius:16px;padding:15px;text-align:left;background:#fff;cursor:pointer}
+.type.active{border-color:var(--green);background:#eff9df}
+.type b{display:block;font-size:18px}.type small{color:var(--muted)}
+.field{margin:10px 0}.field label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:6px}
+input{width:100%;padding:14px;border:1px solid var(--line);border-radius:12px;font-size:15px;outline:none}
+input:focus{border-color:var(--green)}
+.btn{width:100%;border:0;border-radius:13px;padding:15px;background:var(--green);color:#fff;font-size:16px;font-weight:900;cursor:pointer}
+.btn:hover{filter:brightness(.94)}
+.section{max-width:1100px;margin:0 auto;padding:48px 5%}
+.section h2{font-size:34px;letter-spacing:-1px;margin:0 0 20px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px}
+.card .icon{font-size:28px}.card h3{margin:10px 0 6px}.card p{color:var(--muted);margin:0;line-height:1.5}
+.dashboard{display:none}.tabs{display:flex;gap:8px;margin-bottom:20px}.tab{padding:10px 14px;border:1px solid var(--line);background:#fff;border-radius:10px;font-weight:800;cursor:pointer}.tab.active{background:var(--ink);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{background:#fff;border:1px solid var(--line);padding:18px;border-radius:15px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:26px;margin-top:6px}
+.map{height:145px;border-radius:16px;background:radial-gradient(circle at 25% 35%,#b7ef43 0 4px,transparent 5px),radial-gradient(circle at 70% 62%,#087f3e 0 5px,transparent 6px),linear-gradient(120deg,#dfeee0,#c8ddd0);position:relative;overflow:hidden;margin:12px 0}.road{position:absolute;width:130%;height:18px;background:#fff;transform:rotate(-19deg);top:63px;left:-15%;opacity:.8}.pin{position:absolute;font-size:25px}
+footer{text-align:center;padding:35px;color:var(--muted);font-size:13px}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:20;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modalbox{background:#fff;border-radius:22px;padding:25px;max-width:430px;width:100%}.close{float:right;border:0;background:none;font-size:25px;cursor:pointer}
+.success{background:#eff9df;border-radius:14px;padding:14px;margin:15px 0}
+@media(max-width:760px){.hero-grid{grid-template-columns:1fr}.features{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}nav button:nth-child(2),nav button:nth-child(3){display:none}h1{letter-spacing:-2px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Kiki's <span>Boda</span></div>
+  <nav>
+    <button onclick="showHome()">Book a ride</button>
+    <button onclick="showDriver()">Driver</button>
+    <button onclick="showAdmin()">Admin</button>
+  </nav>
+</header>
+
+<main id="home">
+<section class="hero">
+<div class="hero-grid">
+<div>
+<span class="pill">NAIROBI • FAST & LOCAL</span>
+<h1>Your ride.<br><span style="color:#087f3e">Your way.</span></h1>
+<p>Book a Boda or Bajaji in Nairobi in seconds. Simple pricing, trusted drivers and convenient M-Pesa payment.</p>
+</div>
+
+<div class="booking">
+<h2 style="margin-top:0">Where are you going?</h2>
+
+<div class="types">
+<button class="type active" id="boda" onclick="selectType('boda')">🏍️<b>Boda</b><small>Fast & flexible</small></button>
+<button class="type" id="bajaji" onclick="selectType('bajaji')">🛺<b>Bajaji</b><small>More space</small></button>
+</div>
+
+<div class="field">
+<label>PICK-UP</label>
+<input id="pickup" placeholder="e.g. Utawala">
+</div>
+
+<div class="field">
+<label>DESTINATION</label>
+<input id="destination" placeholder="e.g. CBD">
+</div>
+
+<div class="map">
+<div class="road"></div>
+<div class="pin" style="left:23%;top:18%">📍</div>
+<div class="pin" style="left:67%;top:49%">📍</div>
+</div>
+
+<button class="btn" onclick="estimate()">See price & book</button>
+</div>
+</div>
+</section>
+
+<section class="section">
+<h2>Made for Nairobi</h2>
+<div class="features">
+
+<div class="card">
+<div class="icon">⚡</div>
+<h3>Fast booking</h3>
+<p>Choose your vehicle, enter two locations and get moving.</p>
+</div>
+
+<div class="card">
+<div class="icon">💳</div>
+<h3>M-Pesa ready</h3>
+<p>The production version will connect directly to M-Pesa for secure payments.</p>
+</div>
+
+<div class="card">
+<div class="icon">🛡️</div>
+<h3>Trusted drivers</h3>
+<p>Driver profiles, vehicle details, ratings and trip history.</p>
+</div>
+
+</div>
+</section>
+</main>
+
+<section class="section dashboard" id="driver">
+<h2>Driver dashboard</h2>
+
+<div class="tabs">
+<button class="tab active">Today</button>
+<button class="tab">Trips</button>
+<button class="tab">Earnings</button>
+</div>
+
+<div class="stats">
+<div class="stat"><small>STATUS</small><strong style="color:#087f3e">● ONLINE</strong></div>
+<div class="stat"><small>TRIPS TODAY</small><strong>8</strong></div>
+<div class="stat"><small>EARNINGS</small><strong>KES 2,840</strong></div>
+<div class="stat"><small>RATING</small><strong>4.9 ★</strong></div>
+</div>
+
+<div class="card" style="margin-top:18px">
+<b>Incoming ride</b>
+<p style="color:#69726a">Utawala → Nairobi CBD · Boda · estimated KES 420</p>
+<button class="btn" onclick="alert('Demo: ride accepted')">Accept ride</button>
+</div>
+</section>
+
+<section class="section dashboard" id="admin">
+<h2>Kiki's Boda — Admin</h2>
+
+<div class="stats">
+<div class="stat"><small>DRIVERS ONLINE</small><strong>17</strong></div>
+<div class="stat"><small>RIDES TODAY</small><strong>126</strong></div>
+<div class="stat"><small>REVENUE</small><strong>KES 48,650</strong></div>
+<div class="stat"><small>RATING</small><strong>4.8 ★</strong></div>
+</div>
+
+<div class="card" style="margin-top:18px">
+<b>Live operations</b>
+
+<div class="map">
+<div class="road"></div>
+<div class="pin" style="left:20%;top:20%">🏍️</div>
+<div class="pin" style="left:55%;top:55%">🛺</div>
+<div class="pin" style="left:76%;top:25%">🏍️</div>
+</div>
+
+<p style="color:#69726a">Production version: real-time driver locations, trips, payments and support.</p>
+</div>
+</section>
+
+<footer>Kiki's Boda © 2026 · Nairobi, Kenya</footer>
+
+<div class="modal" id="modal">
+<div class="modalbox">
+<button class="close" onclick="closeModal()">×</button>
+<h2>Confirm your ride</h2>
+<div id="quote"></div>
+<div class="success">💚 Your ride can be paid by M-Pesa in the production version.</div>
+<button class="btn" onclick="confirmRide()">Confirm booking</button>
+</div>
+</div>
+
+<script>
+let vehicle='boda';
+
+function selectType(t){
+vehicle=t;
+document.getElementById('boda').classList.toggle('active',t==='boda');
+document.getElementById('bajaji').classList.toggle('active',t==='bajaji')
+}
+
+function estimate(){
+const p=document.getElementById('pickup').value.trim(), d=document.getElementById('destination').value.trim();
+
+if(!p||!d){
+alert('Please enter both pick-up and destination.');
+return
+}
+
+const base=vehicle==='boda'?180:280, est=base+(vehicle==='boda'?240:360);
+
+document.getElementById('quote').innerHTML=`<div class="card"><b>${vehicle==='boda'?'🏍️ Boda':'🛺 Bajaji'}</b><p>${p} → ${d}</p><h2 style="margin:8px 0">KES ${est}</h2><small>Estimated fare · Demo price</small></div>`;
+
+document.getElementById('modal').classList.add('open');
+}
+
+function confirmRide(){
+document.getElementById('quote').innerHTML='<div class="success"><b>Booking received!</b><br>Demo ride request created. A nearby driver would be matched here.</div>';
+setTimeout(closeModal,1800)
+}
+
+function closeModal(){
+document.getElementById('modal').classList.remove('open')
+}
+
+function hideDash(){
+document.querySelectorAll('.dashboard').forEach(x=>x.style.display='none');
+document.getElementById('home').style.display='block'
+}
+
+function showHome(){
+hideDash()
+}
+
+function showDriver(){
+document.getElementById('home').style.display='none';
+document.getElementById('admin').style.display='none';
+document.getElementById('driver').style.display='block'
+}
+
+function showAdmin(){
+document.getElementById('home').style.display='none';
+document.getElementById('driver').style.display='none';
+document.getElementById('admin').style.display='block'
+}
+</script>
+
+</body>
+</html>
