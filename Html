@@ -3061,15 +3061,58 @@ renderAdmin();
 );
 
 </script>
-</script>
 
 <script>
-/* KIKI'S BODA — FINAL LANGUAGE COMPLETION */
-...
+(function(){
+  const oldSetLanguage = window.setLanguage;
+
+  const extra = {
+    en: {
+      pill: "NAIROBI • FAST & LOCAL",
+      hero: 'Your ride.<br><span style="color:#087f3e">Your way.</span>',
+      heroText: "Book a boda or bajaji quickly and safely across Nairobi.",
+      notice: "Prototype version — bookings are currently stored locally.",
+      help: "Need help? Contact Kiki’s Boda support.",
+      map: "Map will appear here when location is available.",
+      fast: "FAST & RELIABLE",
+      mpesa: "Pay securely with M-Pesa",
+      trusted: "Trusted local drivers"
+    },
+    sw: {
+      pill: "NAIROBI • HARAKA & KARIBU",
+      hero: 'Safari yako.<br><span style="color:#087f3e">Kwa njia yako.</span>',
+      heroText: "Agiza boda au bajaji kwa haraka na usalama kote Nairobi.",
+      notice: "Toleo la majaribio — maagizo yanahifadhiwa kwenye kifaa hiki.",
+      help: "Unahitaji msaada? Wasiliana na Kiki’s Boda.",
+      map: "Ramani itaonekana hapa eneo litakapopatikana.",
+      fast: "HARAKA & YA KUAMINIKA",
+      mpesa: "Lipa kwa usalama kupitia M-Pesa",
+      trusted: "Madereva wa eneo wanaoaminika"
+    }
+  };
+
+  function extraLanguage(lang){
+    const x = extra[lang] || extra.en;
+
+    document.querySelectorAll("[data-extra='pill']").forEach(e => e.innerHTML = x.pill);
+    document.querySelectorAll("[data-extra='hero']").forEach(e => e.innerHTML = x.hero);
+    document.querySelectorAll("[data-extra='heroText']").forEach(e => e.textContent = x.heroText);
+    document.querySelectorAll("[data-extra='notice']").forEach(e => e.textContent = x.notice);
+    document.querySelectorAll("[data-extra='help']").forEach(e => e.textContent = x.help);
+    document.querySelectorAll("[data-extra='map']").forEach(e => e.textContent = x.map);
+    document.querySelectorAll("[data-extra='fast']").forEach(e => e.textContent = x.fast);
+    document.querySelectorAll("[data-extra='mpesa']").forEach(e => e.textContent = x.mpesa);
+    document.querySelectorAll("[data-extra='trusted']").forEach(e => e.textContent = x.trusted);
+  }
+
+  window.setLanguage = function(lang){
+    oldSetLanguage(lang);
+    extraLanguage(lang);
+  };
+
+  extraLanguage(localStorage.getItem("kikiLanguage") || "en");
+})();
 </script>
-
 </body>
 </html>
 
-</body>
-</html>
